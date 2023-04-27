@@ -1,5 +1,11 @@
 { pkgs }: {
   deps = [
+    pkgs.from tkinter import ttk
+    pkgs.from tkinter import ttk
+    pkgs.pip install tk
+    pkgs.mailutils
+    pkgs.import tkinter as tk
+    pkgs.import tkinter as tk
     pkgs.python310Full
     pkgs.replitPackages.prybar-python310
     pkgs.replitPackages.stderred

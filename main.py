@@ -1,112 +1,53 @@
-class BankAccount:
-    def __init__(self, name, pin, balance=0.0):
-        self.name = name
-        self.pin = pin
-        self.balance = balance
+import tkinter as tk
 
-    def check_balance(self):
-        return self.balance
+class OnlineBankingApp:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Online Banking System")
 
-    def deposit(self, amount):
-        if amount <= 0:
-            return "Invalid amount. Deposit amount must be greater than zero."
+        # Create a label for the balance
+        self.balance_label = tk.Label(self.master, text="Balance: $0.00")
+        self.balance_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+        # Create a label and entry for the deposit amount
+        self.deposit_label = tk.Label(self.master, text="Deposit amount:")
+        self.deposit_label.grid(row=1, column=0, padx=10, pady=10)
+        self.deposit_entry = tk.Entry(self.master)
+        self.deposit_entry.grid(row=1, column=1, padx=10, pady=10)
+
+        # Create a button to deposit funds
+        self.deposit_button = tk.Button(self.master, text="Deposit", command=self.deposit_funds)
+        self.deposit_button.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+
+        # Create a label and entry for the withdrawal amount
+        self.withdrawal_label = tk.Label(self.master, text="Withdrawal amount:")
+        self.withdrawal_label.grid(row=3, column=0, padx=10, pady=10)
+        self.withdrawal_entry = tk.Entry(self.master)
+        self.withdrawal_entry.grid(row=3, column=1, padx=10, pady=10)
+
+        # Create a button to withdraw funds
+        self.withdrawal_button = tk.Button(self.master, text="Withdraw", command=self.withdraw_funds)
+        self.withdrawal_button.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+
+    def deposit_funds(self):
+        amount = float(self.deposit_entry.get())
         self.balance += amount
-        return f"Successfully deposited ${amount}. New balance: ${self.balance}"
+        self.balance_label.config(text=f"Balance: ${self.balance:.2f}")
+        self.deposit_entry.delete(0, tk.END)
 
-    def withdraw(self, amount):
-        if amount <= 0:
-            return "Invalid amount. Withdrawal amount must be greater than zero."
-        if amount > self.balance:
-            return "Insufficient balance."
-        self.balance -= amount
-        return f"Successfully withdrawn ${amount}. New balance: ${self.balance}"
+    def withdraw_funds(self):
+        amount = float(self.withdrawal_entry.get())
+        if amount <= self.balance:
+            self.balance -= amount
+            self.balance_label.config(text=f"Balance: ${self.balance:.2f}")
+        else:
+            tk.messagebox.showerror("Error", "Insufficient funds")
+        self.withdrawal_entry.delete(0, tk.END)
 
-    def modify_account(self, new_name=None, new_pin=None):
-        if new_name:
-            self.name = new_name
-        if new_pin:
-            self.pin = new_pin
-        return "Account details updated successfully."
-
-    def close_account(self):
-        self.name = None
-        self.pin = None
-        self.balance = None
-        return "Account closed successfully."
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = OnlineBankingApp(root)
+    root.mainloop()
 
 
-class Bank:
-    def __init__(self):
-        self.accounts = {}
-
-    def create_account(self, name, pin, initial_deposit=0.0):
-        if name in self.accounts:
-            return "Account with the same name already exists. Please choose a different name."
-        account = BankAccount(name, pin, initial_deposit)
-        self.accounts[name] = account
-        return f"Account created successfully. Account Name: {name}, Account PIN: {pin}"
-
-    def get_account(self, name):
-        if name not in self.accounts:
-            return "Account not found. Please check the account name and try again."
-        return self.accounts[name]
-
-    def close_account(self, name):
-        if name not in self.accounts:
-            return "Account not found. Please check the account name and try again."
-        account = self.accounts.pop(name)
-        return account.close_account()
-
-
-def main():
-    bank = Bank()
-    while True:
-        print("Welcome to Online Banking!")
-        print("1. Create Account")
-        print("2. Login")
-        print("3. Exit")
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            name = input("Enter your name: ")
-            pin = input("Enter your PIN: ")
-            initial_deposit = float(input("Enter initial deposit amount (optional): ")) or 0.0
-            print(bank.create_account(name, pin, initial_deposit))
-        elif choice == "2":
-            name = input("Enter your name: ")
-            pin = input("Enter your PIN: ")
-            account = bank.get_account(name)
-            if not account or account.pin != pin:
-                print("Invalid name or PIN. Please try again.")
-                continue
-            while True:
-                print("Welcome, {}!".format(account.name))
-                print("1. Check Balance")
-                print("2. Deposit")
-                print("3. Withdraw")
-                print("4. Modify Account")
-                print("5. Close Account")
-                print("6. Logout")
-                inner_choice = input("Enter your choice: ")
-                if inner_choice == "1":
-                    print("Current Balance: ${}".format(account.check_balance()))
-                elif inner_choice == "2":
-                    amount = float(input("Enter deposit amount: "))
-                    print(account.deposit(amount))
-                elif inner_choice == "3":
-                    amount = float(input("Enter withdrawal amount:"))
-                    withdraw(self, amount)
-                elif inner_choice == "4":
-                    modify_account()
-                elif inner_choice == "5":
-                  close_pin = input(print('Enter PIN to securely close account:'))
-                  if close_pin == self.pin:
-                    close_account()
-                  else:
-                    print('Account closed unsuccessfully.')
-                    main()
-
-main()
-                    
-              
-            
 
